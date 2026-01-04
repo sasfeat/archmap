@@ -4,9 +4,10 @@ A React application that displays architectural data on an interactive map. Each
 
 ## Features
 
-- Interactive map using Leaflet and React-Leaflet
+- Interactive map using MapLibre GL and React Map GL
 - All architectural locations from `data.json` displayed as markers
 - Clickable markers with popups showing:
+  - Photo (when available)
   - Title
   - Author(s)
   - City
@@ -60,7 +61,7 @@ archmap/
 
 - React 18
 - Vite
-- React-Leaflet
-- Leaflet
-- OpenStreetMap tiles
+- React Map GL
+- MapLibre GL
+- Carto Positron basemap
 
