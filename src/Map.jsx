@@ -33,6 +33,14 @@ function MapBounds({ data }) {
   return null
 }
 
+// Helper function to construct image URL
+function getImageUrl(item) {
+  if (!item.id || !item.img || !item.hash) {
+    return null
+  }
+  return `https://arquitecturaviva.com/assets/uploads/obras/${item.id}/av_thumb__${item.img}?h=${item.hash}`
+}
+
 function Map({ data }) {
   // Parse coordinates and filter out invalid entries
   const markers = data
@@ -70,37 +78,56 @@ function Map({ data }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapBounds data={data} />
-        {markers.map((item, index) => (
-          <Marker key={item.id || index} position={item.position}>
-            <Popup>
-              <div style={{ minWidth: '200px' }}>
-                <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
-                  {item.title}
-                </h3>
-                {item.author && item.author.length > 0 && (
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
-                    <strong>Author:</strong> {item.author.join(', ')}
-                  </p>
-                )}
-                {item.city && item.city.length > 0 && (
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
-                    <strong>City:</strong> {item.city.join(', ')}
-                  </p>
-                )}
-                {item.country && item.country.length > 0 && (
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
-                    <strong>Country:</strong> {item.country.join(', ')}
-                  </p>
-                )}
-                {item.date && (
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
-                    <strong>Date:</strong> {item.date}
-                  </p>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {markers.map((item, index) => {
+          const imageUrl = getImageUrl(item)
+          return (
+            <Marker key={item.id || index} position={item.position}>
+              <Popup>
+                <div style={{ minWidth: '200px', maxWidth: '300px' }}>
+                  {imageUrl && (
+                    <img
+                      src={imageUrl}
+                      alt={item.title || 'Architecture photo'}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        marginBottom: '0.75rem',
+                        borderRadius: '4px',
+                        display: 'block'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                      }}
+                    />
+                  )}
+                  <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem', lineHeight: '1.3' }}>
+                    {item.title}
+                  </h3>
+                  {item.author && item.author.length > 0 && (
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
+                      <strong>Author:</strong> {item.author.join(', ')}
+                    </p>
+                  )}
+                  {item.city && item.city.length > 0 && (
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
+                      <strong>City:</strong> {item.city.join(', ')}
+                    </p>
+                  )}
+                  {item.country && item.country.length > 0 && (
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
+                      <strong>Country:</strong> {item.country.join(', ')}
+                    </p>
+                  )}
+                  {item.date && (
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem' }}>
+                      <strong>Date:</strong> {item.date}
+                    </p>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
       </MapContainer>
     </div>
   )
